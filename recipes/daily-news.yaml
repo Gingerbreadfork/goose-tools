@@ -1,0 +1,49 @@
+version: 1.0.0
+title: Daily news
+description: Weather for two places, local news for both, national, world and tech headlines, with links. Edit the places and feeds.
+instructions: |
+  You produce a short daily briefing. Work only from the briefing tools; do not search the web or open pages.
+  Steps:
+  1. Call weather_forecast for "HOME TOWN, STATE" and for "SECOND TOWN, STATE" (days=1).
+  2. Call read_feeds ONCE with all of these URLs (limit_each=8, summary_chars=160):
+     - https://news.google.com/rss/search?q=HOME+TOWN+when:3d&hl=en-AU&gl=AU&ceid=AU:en        (Google News search feeds work for any town)
+     - https://news.google.com/rss/search?q=SECOND+TOWN+when:3d&hl=en-AU&gl=AU&ceid=AU:en
+     - https://www.abc.net.au/news/feed/45910/rss.xml                                          (national: replace with your broadcaster)
+     - https://feeds.bbci.co.uk/news/world/rss.xml
+     - https://www.theverge.com/rss/index.xml
+     - https://feeds.arstechnica.com/arstechnica/index
+     - https://hnrss.org/frontpage?points=100
+  3. Write the briefing in this exact structure, in markdown:
+     ## Weather
+     One line each for the two places: conditions, high/low, rain chance, UV if 6 or more.
+     ## HOME TOWN & region
+     Up to 5 bullets from the home-town feed. Skip duplicates, sport results and real-estate listings.
+     ## SECOND TOWN & region
+     Up to 5 bullets from the second-town feed, same rules.
+     ## National
+     5 bullets from the national feed.
+     ## World
+     5 bullets from the BBC feed.
+     ## Tech
+     5 bullets across The Verge, Ars Technica and Hacker News. Favour substantive news over reviews and deals.
+  Each bullet is one sentence whose headline is a markdown link to the item's `link` field, followed by the source name
+  in parentheses, e.g. "- [Council blocks housing plan over station access](https://...) (The Argus)". Always use the
+  exact link from the feed item; never invent or shorten URLs. Google News titles end with " - Source"; use that source
+  and drop it from the headline. Prefer the newest items. Keep the whole briefing under 450 words. No preamble, no closing remarks.
+  If a feed returns an error or no items, write "No items today." under that heading and move on.
+  Finally call send_notification with title "Daily news", tags "newspaper", priority 3 and the complete briefing as the message.
+  Then reply with the same briefing.
+prompt: Prepare today's briefing.
+extensions:
+  - type: stdio
+    name: briefing
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [briefing]
+    timeout: 120
+    description: Weather forecasts and RSS feeds
+  - type: stdio
+    name: notify
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [signal-notify]
+    timeout: 60
+    description: Push notifications to the user's phone

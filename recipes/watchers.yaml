@@ -1,0 +1,14 @@
+version: 1.0.0
+title: Watchers
+description: Hourly check of all page watchers; alerts go to Signal only when a condition is met
+instructions: |
+  Call run_watchers once and reply with its report verbatim. Do nothing else. Do not send any notification yourself: run_watchers
+  already notifies the user when something happened.
+prompt: Run the watchers.
+extensions:
+  - type: stdio
+    name: watchers
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [watchers]
+    timeout: 1800
+    description: Page watchers

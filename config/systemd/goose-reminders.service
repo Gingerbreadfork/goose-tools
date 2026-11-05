@@ -1,0 +1,11 @@
+[Unit]
+Description=Goose reminders (delivers due reminders via the configured notifier)
+After=network-online.target
+
+[Service]
+ExecStart=/PATH/TO/goose-tools/bin/run-service.sh reminders
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

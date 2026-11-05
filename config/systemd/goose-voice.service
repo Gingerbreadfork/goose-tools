@@ -1,0 +1,13 @@
+[Unit]
+Description=Goose voice agent (LiveKit pipeline)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/PATH/TO/goose-tools/voice
+ExecStart=/PATH/TO/goose-tools/voice/.venv/bin/python /PATH/TO/goose-tools/voice/agent.py start
+Restart=on-failure
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

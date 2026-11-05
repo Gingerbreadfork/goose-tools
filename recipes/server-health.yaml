@@ -1,0 +1,35 @@
+version: 1.0.0
+title: Server health
+description: Daily health check of the server (disk, memory, GPU, temps, services, containers, SSH activity, updates)
+instructions: |
+  You are checking the home server. Do exactly this:
+  1. Run the shell command: /PATH/TO/goose-tools/scripts/health.sh   (one call, nothing else; do not run other commands).
+  2. Call decide_score with state = the full report and question "How much attention does this server need?" and levels:
+     ["none: everything normal, routine noise only", "soon: something degraded or filling up but still working",
+      "now: a service is down, disk nearly full, overheating, or a security concern"].
+  3. Write the report:
+     First line: **Status: OK** / **Status: Attention** / **Status: Problem** (from the score: 0 -> OK, 1 -> Attention, 2 -> Problem).
+     Then "Key numbers" as one line: disk used %, RAM available, GPU memory in use (if shown), hottest temperature, uptime.
+     Then up to 6 bullets of anything notable, most important first. If nothing is notable, one bullet: "Nothing out of the ordinary."
+     Then one line: "Updates: N packages upgradable, reboot required yes/no."
+  Known benign noise, do not report: (add your own here, e.g. a unit that always fails harmlessly at boot).
+  Thresholds: disk over 80% or RAM available under 15 GiB or any temperature over 85C or the model server unreachable
+  or goose-serve not active or more than 50 SSH failed logins or any fail2ban ban = notable. Under 180 words total. No preamble.
+  Finally call send_notification with the report as the message: title "server: OK" / "server: attention" / "server: PROBLEM",
+  tags "white_check_mark" / "warning" / "rotating_light", priority 2 / 3 / 5 respectively. Then reply with the same report.
+prompt: Run the daily health check.
+extensions:
+  - type: builtin
+    name: developer
+  - type: stdio
+    name: decisions
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [decisions]
+    timeout: 60
+    description: Fast calibrated decisions
+  - type: stdio
+    name: notify
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [signal-notify]
+    timeout: 60
+    description: Push notifications to the user's phone

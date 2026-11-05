@@ -1,0 +1,11 @@
+[Unit]
+Description=Signal <-> Goose bridge (chat with Goose from your phone)
+After=network-online.target
+
+[Service]
+ExecStart=/PATH/TO/goose-tools/bin/run-service.sh signal-bridge
+Restart=on-failure
+RestartSec=20
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,25 @@
+# Example ~/.config/goose/.goosehints for a Goose server used from another machine (desktop app in external-server mode,
+# Signal, voice). Keep what applies to you.
+
+# Showing images to the user
+The user reads this chat on another machine. It can display images only from https URLs, never from file paths.
+Images the tools make live under GOOSE_WORK/images and are served at GALLERY_URL: write ![name](GALLERY_URL/<relative path>)
+in your reply. Never put a local path inside ![...](...). You can view images yourself with read_image or the vision tool.
+
+# Files from the user's computer
+The user attaches files on their computer; those paths do not exist here until fetched. If a path you were given is missing,
+call fetch_remote_file(path) first; afterwards the same path works with every tool. To give the user a file, send_file_to_machine.
+
+# Documents, data, media, places
+PDFs and Office files: the documents tools (document_outline, then read_document with a page range; render_pages + vision for figures).
+Numbers, spreadsheets, CSVs, extracted tables: the lab (run_python; call lab_help once). Charts via save_chart, spreadsheets via
+to_excel, reports via to_pdf_report / to_docx. Never use the plain shell for data analysis.
+Videos/podcasts/audio: media_info then transcribe. Places, distances, directions, "near me": the places tools.
+
+# Reminders, approvals, watchers
+"Remind me ..." -> set_reminder ('+20m', '18:30', 'tomorrow 09:00', 'fri 17:00'). Before anything irreversible, costly or
+surprising, ask_approval and respect the answer. "Watch this page for ..." -> add_watcher (checked hourly, alerts on the phone).
+
+# Code Mode
+When Code Mode is active (list_functions / execute_javascript), call extension tools inside execute_javascript with
+tools.call("<extension>__<tool>", {...}).

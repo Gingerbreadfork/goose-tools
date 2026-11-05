@@ -1,0 +1,147 @@
+# Extension entries for ~/.config/goose/config.yaml (merge under `extensions:`). Replace /PATH/TO/goose-tools.
+# Each tool is independent: add only the ones you want. The launcher reads <repo>/.env for configuration.
+extensions:
+  decisions:
+    name: decisions
+    display_name: Decisions
+    description: Fast calibrated yes/no, choice and score decisions from a System One / Jev-compatible model. Use instead of reasoning when you need a quick classification, a routing choice, or a guardrail check.
+    type: stdio
+    enabled: true
+    timeout: 60
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [decisions]
+  vision:
+    name: vision
+    display_name: Vision (look at images)
+    description: Look at an image (file path or URL, including generated images) and answer questions about it - describe, check, read text, interpret screenshots and charts.
+    type: stdio
+    enabled: true
+    timeout: 180
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [vision]
+  imagegen:
+    name: imagegen
+    display_name: Image generation
+    description: Generate images. Returns a markdown image link to paste into the reply (when a gallery is configured) plus the saved file path.
+    type: stdio
+    enabled: true
+    timeout: 300
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [imagegen]
+  briefing:
+    name: briefing
+    display_name: Weather & feeds
+    description: Weather forecasts for any place (no key) and RSS/Atom feed reading. Use for daily briefings, news roundups and weather questions.
+    type: stdio
+    enabled: true
+    timeout: 120
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [briefing]
+  places:
+    name: places
+    display_name: Places & travel
+    description: OpenStreetMap-based - geocode addresses, find places of a kind near a location with distances and opening hours, driving/cycling/walking routes with duration, distances to several places, and map images.
+    type: stdio
+    enabled: true
+    timeout: 180
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [places]
+  documents:
+    name: documents
+    display_name: Documents (PDF, Office, local)
+    description: Read PDF, Word, PowerPoint, Excel, HTML and image files as clean markdown with tables, fully locally (Docling). document_outline first for long files, read_document with a page range, extract_tables for data, render_pages + the vision tool for figures.
+    type: stdio
+    enabled: true
+    timeout: 900
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [documents]
+  media:
+    name: media
+    display_name: Media transcription
+    description: Transcribe YouTube/podcast/web videos (by URL) or local audio/video files with timestamps; media_info for a video's title and length first.
+    type: stdio
+    enabled: true
+    timeout: 1800
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [media]
+  lab:
+    name: lab
+    display_name: Data analysis lab
+    description: Persistent Python sandbox for data work - pandas/polars/duckdb, statistics, machine learning, styled charts, formatted Excel workbooks, polished PDF and Word reports. Call lab_help once for the helpers.
+    type: stdio
+    enabled: true
+    timeout: 960
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [lab]
+  remote_files:
+    name: remote_files
+    display_name: Files on other computers
+    description: Files attached in Goose Desktop live on the user's computer, not on this server. If a path the user gave does not exist locally, call fetch_remote_file(path) first; it lands at the same path here. send_file_to_machine delivers results back.
+    type: stdio
+    enabled: true
+    timeout: 300
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [remote-files]
+  notify:
+    name: notify
+    display_name: Phone notifications (Signal)
+    description: Send the user a Signal message on their phone. Use when the user asks to be notified, reminded or alerted, or when a scheduled job finishes with something worth telling them.
+    type: stdio
+    enabled: true
+    timeout: 60
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [signal-notify]
+  approvals:
+    name: approvals
+    display_name: Approvals (ask on Signal)
+    description: ask_approval sends the user a yes/no question on Signal and waits for the reply. Use before anything irreversible, costly or surprising. Do not proceed on 'denied' or 'no answer'.
+    type: stdio
+    enabled: true
+    timeout: 11000
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [approvals]
+  reminders:
+    name: reminders
+    display_name: Reminders
+    description: Set, list and cancel reminders/timers delivered to the user; supports repeats. Convert natural language times to the accepted forms using the current time from the context.
+    type: stdio
+    enabled: true
+    timeout: 60
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [reminders]
+  watchers:
+    name: watchers
+    display_name: Page watchers
+    description: Watch web pages for a condition (price drop, back in stock, new item, page changed) and alert the user when it happens. add_watcher / list_watchers / remove_watcher; run_watchers is run hourly by a schedule.
+    type: stdio
+    enabled: true
+    timeout: 1800
+    cmd: /PATH/TO/goose-tools/bin/run-tool.sh
+    args: [watchers]
+  # Third-party servers that pair well (not part of this repo):
+  searxng:
+    name: searxng
+    display_name: Web search (SearXNG)
+    description: Private web search and page reading via a local SearXNG instance
+    type: stdio
+    enabled: true
+    timeout: 120
+    cmd: docker
+    args: [run, -i, --rm, --network, host, -e, SEARXNG_URL=http://127.0.0.1:8888, isokoliuk/mcp-searxng:latest]
+  fetch:
+    name: fetch
+    display_name: Fetch (web pages to markdown)
+    description: Fetch a URL and convert it to markdown
+    type: stdio
+    enabled: true
+    timeout: 120
+    cmd: docker
+    args: [run, -i, --rm, mcp/fetch:latest]
+  browser:
+    name: browser
+    display_name: Browser (Playwright, headless Chromium)
+    description: Full web browser - navigate, click, type, fill forms, read pages via snapshot, screenshots, PDFs. Started by scripts/start-browser.sh.
+    type: streamable_http
+    uri: http://127.0.0.1:8931/mcp
+    enabled: false
+    timeout: 300
